@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "customer")
-public class Customer extends Client{
+@Table(name = "client")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +26,10 @@ public class Customer extends Client{
     private String email;
     @Column
     private String password;
+
+    @OneToOne(mappedBy = "customer",cascade = CascadeType.PERSIST)
+    private Address address;
+
+    @OneToMany(mappedBy = "customer", cascade =CascadeType.PERSIST)
+    private Order order;
 }

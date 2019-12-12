@@ -3,6 +3,7 @@ package blocojava.compraexpress.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,4 +22,13 @@ public class Product {
     private String description; //description, ingredients, moto, etc
     @Column
     private Double price;
+
+    @ManyToMany
+    @JoinColumn(name = "id_menu")
+    private Menu menu;
+
+    @ManyToMany
+    @JoinColumn(name = "id_item")
+    private List<Item> item;
+
 }

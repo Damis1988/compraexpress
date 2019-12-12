@@ -22,7 +22,8 @@ public class Order {
     private Set<Item> itemSet;
     @Column
     private Double total;
+
     @ManyToOne
-    @JoinColumn(name = "id_customer")
+    @JoinColumn(name = "id_order")
     private Customer customer;
 }
