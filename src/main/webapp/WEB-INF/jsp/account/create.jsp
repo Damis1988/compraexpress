@@ -18,7 +18,7 @@
                 <c:out value="${message}" />
                 <c:if test="${success == true}">
                     <br><br>
-                    <a href="<%=request.getContextPath()%>/login/login">Login here</a>
+                    <a href="<%=request.getContextPath()%>/login/doLogin">Login here</a>
                 </c:if>
             </h4>
         </c:if>
@@ -32,58 +32,58 @@
                     <div class="col-sm-10">
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.name != null)}">
-                                <input type="text" name="name" id="name" class="form-control" value="${onGoing.name}">
+                                <input type="text" name="name" id="name" class="form-control" value="${onGoing.name}" required>
                             </c:when>
                             <c:otherwise>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Name" required>
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div class="col-sm-10">
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.surname != null)}">
-                                <input type="text" name="surname" id="surname" class="form-control" value="${onGoing.surname}">
+                                <input type="text" name="surname" id="surname" class="form-control" value="${onGoing.surname}" required>
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="surname" class="form-control" name="surname" placeholder="Surname">
+                                <input type="text" id="surname" class="form-control" name="surname" placeholder="Surname" required>
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div class="col-sm-10">
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.cpf != null)}">
-                                <input type="text" id="cpf" class="form-control" name="cpf" onkeypress="$(this).mask('000.000.000-00');" value="${onGoing.cpf}">
+                                <input type="text" id="cpf" class="form-control" name="cpf" onkeypress="$(this).mask('000.000.000-00');" value="${onGoing.cpf}" required>
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="cpf" class="form-control" name="cpf" onkeypress="$(this).mask('000.000.000-00');" placeholder="CPF">
+                                <input type="text" id="cpf" class="form-control" name="cpf" onkeypress="$(this).mask('000.000.000-00');" placeholder="CPF" required>
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div class="col-sm-10">
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.email != null)}">
-                                <input type="text" id="email" class="form-control" name="email" value="${onGoing.email}">
+                                <input type="email" id="email" class="form-control" name="email" value="${onGoing.email}" required>
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="email" class="form-control" name="email" placeholder="Email">
+                                <input type="email" id="email" class="form-control" name="email" placeholder="Email" required>
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div class="col-sm-10">
-                        <input type="text" id="password" class="form-control" name="password" placeholder="Password">
+                        <input type="password" id="password" class="form-control" name="password" placeholder="Password" required>
                     </div>
                     <div class="col-sm-10">
-                        <input type="text" id="confirm_password" class="form-control" name="confirm_password" placeholder="Confirm Password">
+                        <input type="password" id="confirm_password" class="form-control" name="confirm_password" placeholder="Confirm Password" required>
                     </div>
                     <br>
                     <h3>Contact information:</h3>
                     <div class="col-sm-10">
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.phone != null)}">
-                                <input type="text" id="phone" name="phone" class="form-control" onkeypress="$(this).mask('(00) 0000-00009')" value="${onGoing.phone}">
+                                <input type="text" id="phone" name="phone" class="form-control" onkeypress="$(this).mask('(00) 0000-00009')" value="${onGoing.phone}" >
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="phone" name="phone" class="form-control" onkeypress="$(this).mask('(00) 0000-00009')" placeholder="Phone Number">
+                                <input type="text" id="phone" name="phone" class="form-control" onkeypress="$(this).mask('(00) 0000-00009')" placeholder="Phone Number" >
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -91,21 +91,21 @@
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.address.street != null)}">
                                 <input type="text" id="street" class="form-control" name="street" pattern="[a-z\s]+$"
-                                       title="Enter letters only" value="${onGoing.address.street}">
+                                       title="Enter letters only" value="${onGoing.address.street}" >
                             </c:when>
                             <c:otherwise>
                                 <input type="text" id="street" class="form-control" name="street" pattern="[a-z\s]+$"
-                                       title="Enter letters only" placeholder="Street">
+                                       title="Enter letters only" placeholder="Street" >
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div class="col-sm-10">
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.address.number != null)}">
-                                <input type="number" id="number" class="form-control" name="number" step="1" value="${onGoing.address.number}">
+                                <input type="number" id="number" class="form-control" name="number" step="1" value="${onGoing.address.number}" >
                             </c:when>
                             <c:otherwise>
-                                <input type="number" id="number" class="form-control" name="number" step="1" placeholder="Number">
+                                <input type="number" id="number" class="form-control" name="number" step="1" placeholder="Number" >
                             </c:otherwise>
                         </c:choose>
                     </div>

@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>SMARTFOOD — Sign up</title>
+    <title>SMARTFOOD — Edit Account</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap-theme.min.css" integrity="sha384-jzngWsPS6op3fgRCDTESqrEJwRKck+CILhJVO5VvaAZCq8JYf8HsR/HPpBOOPZfR" crossorigin="anonymous">
@@ -11,27 +11,18 @@
 </head>
 <body>
 <div class="container">
-    <h2>
-        Edit your account
-    </h2>
-
-
+    <h2>EDIT YOUR ACCOUNT</h2>
 
             <c:if test="${message != null}">
                 <h3>
                     <c:out value="${message}" />
-                    <c:if test="${success == true}">
-                        <br>
-                        <a href="<%=request.getContextPath()%>/login/doLogin">Login here</a>
-                    </c:if>
                 </h3>
-
             </c:if>
-            <c:if test="${success == false}">
 
     <br>
     <h2>Personal information:</h2>
-    <form method="post" action="<%=request.getContextPath()%>/client/edit" class="form-horizontal">
+    <form method="post" action="<%=request.getContextPath()%>/account/update" class="form-horizontal">
+        <input type="hidden" name="id">
         <div class="form-group form-group-lg">
             <label for="name" class="col-sm-2 control-label">Name:</label>
             <div class="col-sm-10">
@@ -128,9 +119,6 @@
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
-
-    </c:if>
-
 </div>
 
 <br><br>
