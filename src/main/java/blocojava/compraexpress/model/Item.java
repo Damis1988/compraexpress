@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "item")
-public class Item extends Product{
+public class Item {
 
 /* 'Item' refers to each item included in the shopping cart.
     Multiple identical products will be counted as one single item.
@@ -22,6 +22,27 @@ public class Item extends Product{
     private Integer quantity;
     @Column
     private Double value;
-    @Column
-    private String observations; //tell the restaurant any extra information about the order
+
+    @ManyToOne
+    @JoinColumn(name = "id_product")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "id_order")
+    private Order order;
+
+    public Item(Integer quantity, Product product) {
+        this.quantity = quantity;
+        this.product = product;
+        updateValue();
+    }
+
+    public void updateValue(){
+        this.value = this.product.getPrice() * this.quantity;
+    }
+
+    public void setQuantity(Integer quantity){
+        this.quantity = quantity;
+        updateValue();
+    }
 }

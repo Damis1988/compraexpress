@@ -14,10 +14,13 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_sector")
-    private List<String> sectors;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_produto")
+    @OneToMany(mappedBy = "menu", targetEntity = Sector.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
+    private List<Sector> sectors;
+
+    @OneToMany(mappedBy = "menu", targetEntity = Product.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
     private List<Product> products;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_restaurant")
+    private Restaurant restaurant;
 }

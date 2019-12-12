@@ -1,5 +1,8 @@
 package blocojava.compraexpress.controller;
 
+import blocojava.compraexpress.interceptor.CustomerSession;
+import blocojava.compraexpress.model.Item;
+import blocojava.compraexpress.model.Product;
 import blocojava.compraexpress.model.Restaurant;
 import blocojava.compraexpress.repository.RestaurantRepository;
 import org.hibernate.validator.constraints.EAN;
@@ -15,10 +18,12 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "restaurant")
-public class MenuController {
+public class RestaurantController {
 
     @Autowired
     RestaurantRepository restaurantRepository;
+    @Autowired
+    CustomerSession customerSession;
 
     @GetMapping(value = "listRestaurant")
     public String list(Map<String, Object> model){
@@ -31,6 +36,8 @@ public class MenuController {
     public String view(@RequestParam("option") String option, Map<String,Object> model){
         Restaurant restaurant = restaurantRepository.findByTradeName(option);
         model.put("restaurant", restaurant);
+        List<Item> items = customerSession.getCart();
+        model.put("cart", items);
         return "restaurant/menu";
     }
 

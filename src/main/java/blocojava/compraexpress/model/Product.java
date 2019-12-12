@@ -3,6 +3,7 @@ package blocojava.compraexpress.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -14,11 +15,18 @@ public class Product {
     private Long id;
 
     @Column
-    private String sector; //e.g.: drinks, pasta, meat, seafood, desert, etc
-    @Column
     private String name;
     @Column
-    private String description; //description, ingredients, moto, etc
-    @Column
     private Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "id_menu")
+    private Menu menu;
+
+    @ManyToOne
+    @JoinColumn(name = "id_sector")
+    private Sector sector; //e.g.: drinks, pasta, meat, seafood, desert, etc
+
+    @OneToMany(mappedBy = "product", targetEntity = Item.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
+    private List<Item> items;
 }

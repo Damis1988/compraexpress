@@ -3,11 +3,12 @@ package blocojava.compraexpress.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @Table(name = "customer")
-public class Customer extends Client{
+public class Customer{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +18,18 @@ public class Customer extends Client{
     @Column
     private String surname;
     @Column
-    private String gender;
-    @Column
-    private String birthday;
-    @Column
     private String cpf;
     @Column
     private String email;
     @Column
     private String password;
+    @Column
+    private String phone;
+
+    @OneToOne
+    @JoinColumn(name = "id_address")
+    private Address address;
+
+    @OneToMany(mappedBy = "customer", targetEntity = Order.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
+    private List<Order> order;
 }

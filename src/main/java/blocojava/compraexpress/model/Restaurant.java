@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "restaurant")
-public class Restaurant extends Client{
+public class Restaurant{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,14 @@ public class Restaurant extends Client{
     private String tradeName;
     @Column
     private String cnpj;
+    @Column
+    private String phone;
+
+    @OneToOne(mappedBy = "restaurant",cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_address")
+    private Address address;
+
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_menu")
-    Menu menu;
+    private Menu menu;
 }

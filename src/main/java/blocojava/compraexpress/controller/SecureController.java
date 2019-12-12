@@ -18,6 +18,6 @@ public class SecureController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String main(Map<String,Object> model) {
         model.put("customer", customerSession.getLoggedUser());
-        return "main";
+        return "login/doLogin";
     }
 }

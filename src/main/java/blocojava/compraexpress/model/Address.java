@@ -29,4 +29,12 @@ public class Address {
     private String state;
     @Column
     private String country;
+
+    @OneToOne
+    @JoinColumn(name = "id_customer")
+    private Customer customer;
+
+    @OneToOne
+    @JoinColumn(name = "id_restaurant")
+    private Restaurant restaurant;
 }

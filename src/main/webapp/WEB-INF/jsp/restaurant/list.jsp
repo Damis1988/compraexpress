@@ -9,11 +9,18 @@
 </head>
 <body>
 
-    <h1>Choose a Restaurant</h1>
-
-    <c:forEach var="restaurant" items="${all}">
-        <a href="<%=request.getContextPath()%>/restaurant/menu/${restaurant.id_restaurant}"><c:out value="${restaurant.tradeName}"/></a><br>
-    </c:forEach>
+    <c:choose>
+        <c:when test="${all == null}">
+            <p>There are no restaurants available.</p>
+        </c:when>
+        <c:otherwise>
+            <h1>Choose a Restaurant</h1>
+            <br>
+            <c:forEach var="restaurant" items="${all}">
+                <a href="<%=request.getContextPath()%>/restaurant/menu/${restaurant.id_restaurant}"><c:out value="${restaurant.tradeName}"/></a><br>
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
 
 </body>
 </html>

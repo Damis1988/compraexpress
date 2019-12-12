@@ -8,10 +8,7 @@ import blocojava.compraexpress.security.CryptWithMD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -45,8 +42,6 @@ public class CustomerController {
     @PostMapping(value = "create")
     public void save(@RequestParam("name") String name,
                      @RequestParam("surname") String surname,
-                     @RequestParam("gender") String gender,
-                     @RequestParam("birthday") String birthday,
                      @RequestParam("cpf") String cpf,
                      @RequestParam("email") String email,
                      @RequestParam("password") String password,
@@ -61,19 +56,19 @@ public class CustomerController {
                      @RequestParam("country") String country,
                      Map<String,Object> model) {
 
-        Customer customer = new Customer(); customer.setName(name);
-        customer.setSurname(surname); customer.setGender(gender);
-        customer.setBirthday(birthday); customer.setCpf(cpf);
+        Customer customer = new Customer();
+        if (StringUtils.hasText(name) && StringUtils.hasText(surname) &&
+                StringUtils.hasText(cpf)) {
+            customer.setName(name);
+            customer.setSurname(surname);
+            customer.setCpf(cpf);
+        } else {
+            model.put("message", "Fill all the required fields.");
+            return;
+        }
 
-        Address address = new Address(); address.setStreet(street);
-        address.setNumber(number); address.setComplement(complement);
-        address.setZip(zip); address.setNeighborhood(neighborhood);
-        address.setCity(city); address.setState(state);
-        address.setCountry(country); customer.setAddress(address);
-
-        if (customerRepository.findByEmail(email)){
-            msg = ""; msg = "Email already registered";
-            model.put("message", msg);
+        if (customerRepository.findByEmail(email) != null){
+            model.put("message", "Email already registered");
             model.put("success", false);
             model.put("onGoing", customer);
             return;
@@ -81,8 +76,7 @@ public class CustomerController {
         customer.setEmail(email);
 
         if (!password.equals(confirm_password)){
-            msg = ""; msg = "Passwords do not match";
-            model.put("message", msg);
+            model.put("message", "Passwords do not match");
             model.put("success", false);
             model.put("onGoing", customer);
             return;
@@ -90,9 +84,32 @@ public class CustomerController {
         password = passwordCript(password);
         customer.setPassword(password);
 
+        if (StringUtils.hasText(street) || StringUtils.hasText(number)
+                || StringUtils.hasText(complement) || StringUtils.hasText(zip)
+                || StringUtils.hasText(neighborhood) || StringUtils.hasText(city)
+                || StringUtils.hasText(state) || StringUtils.hasText(country)) {
+            if (StringUtils.hasText(street) && StringUtils.hasText(number)
+                    && StringUtils.hasText(complement) && StringUtils.hasText(zip)
+                    && StringUtils.hasText(neighborhood) && StringUtils.hasText(city)
+                    && StringUtils.hasText(state) && StringUtils.hasText(country)) {
+                Address address = new Address();
+                address.setStreet(street);
+                address.setNumber(number);
+                address.setComplement(complement);
+                address.setZip(zip);
+                address.setNeighborhood(neighborhood);
+                address.setCity(city);
+                address.setState(state);
+                address.setCountry(country);
+                customer.setAddress(address);
+            } else {
+                model.put("message", "Oops, fill all the fields in order to register an address.\nRegistering an address is optional.");
+                return;
+            }
+        }
+
         customerRepository.save(customer);
-        msg = ""; msg = "You have been successfully registered";
-        model.put("message", msg);
+        model.put("message", "You have been successfully registered");
         model.put("success", true);
         model.put("onGoing", null);
         return;
@@ -107,12 +124,10 @@ public class CustomerController {
         return "secure/account/update";
     }
 
-    @PostMapping(value = "update/{id}")
+    @PostMapping(value = "update")
     public Customer update(@RequestParam("id") Long id,
                        @RequestParam("name") String name,
                        @RequestParam("surname") String surname,
-                       @RequestParam("gender") String gender,
-                       @RequestParam("birthday") String birthday,
                        @RequestParam("cpf") String cpf,
                        @RequestParam("email") String email,
                        @RequestParam("password") String password,
@@ -126,13 +141,11 @@ public class CustomerController {
                        @RequestParam("state") String state,
                        @RequestParam("country") String country,
                        Map<String,Object> model) {
-        msg = "";
+
         Customer customer = customerRepository.findOne(id);
 
         if (StringUtils.hasText(name)){customer.setName(name);}
         if (StringUtils.hasText(surname)){customer.setSurname(surname);}
-        if (StringUtils.hasText(gender)){customer.setGender(gender);}
-        if (StringUtils.hasText(birthday)){customer.setBirthday(birthday);}
         if (StringUtils.hasText(cpf)){customer.setCpf(cpf);}
 
         Address address = customer.getAddress();
@@ -147,7 +160,7 @@ public class CustomerController {
         customer.setAddress(address);
 
         if (StringUtils.hasText(email)){
-            if (!customerRepository.findByEmail(email)){
+            if (customerRepository.findByEmail(email) == null){
                 customer.setEmail(email);
             } else {
                 msg += "Could not update email. Email already in use. ";
@@ -165,15 +178,16 @@ public class CustomerController {
         return customer;
     }
 
-    @PostMapping(value = "delete")
-    public void delete(){
-        customerRepository.delete(customerSession.getLoggedUser());
-        //TODO não sei se funciona
-    }
-
     @GetMapping(value = "view")
     public String viewAccount(Map<String, Object> model){
         model.put("customer", customerSession.getLoggedUser());
         return "secure/account/view";
+    }
+
+    @PostMapping(value = "delete")
+    public String delete(){
+        customerRepository.delete(customerSession.getLoggedUser());
+        customerSession.removeLoggedUser();
+        return "redirect:/login/doLogin";
     }
 }

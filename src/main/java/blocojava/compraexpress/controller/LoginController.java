@@ -47,6 +47,12 @@ public class LoginController {
         }
     }
 
+    @GetMapping(value = "guest")
+    public String guestLogIn(){
+        customerSession.guestLogIn();
+        return "redirect:/restaurant/listRestaurant";
+    }
+
     @GetMapping(value = "logout")
     public String logout() {
         customerSession.removeLoggedUser();

@@ -24,7 +24,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         LOGGER.info("Interceptando a requisicao {}", url);
         if(url.contains("/secure") && customerSession.getLoggedUser() == null) {
             LOGGER.info("Redirecting to {}", url);
-            String loginPage = httpServletRequest.getContextPath() + "/login/login";
+            String loginPage = httpServletRequest.getContextPath() + "/login/doLogin";
             httpServletResponse.sendRedirect(loginPage);
             return false;
         }

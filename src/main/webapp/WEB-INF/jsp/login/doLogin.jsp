@@ -31,7 +31,10 @@
             </div>
             <br><br>
             <div align="left">
-                <a href="<%=request.getContextPath()%>/user/create">Create your account</a>
+                <a href="<%=request.getContextPath()%>/account/create">Create your account</a>
+            </div>
+            <div align="left">
+                <p><a href="<%=request.getContextPath()%>/login/guest">Express Checkout</a>.</p>
             </div>
         </form>
     </div>
