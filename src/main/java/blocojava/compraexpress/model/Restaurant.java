@@ -3,6 +3,7 @@ package blocojava.compraexpress.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +25,8 @@ public class Restaurant {
     @OneToOne(mappedBy = "restaurant",cascade = CascadeType.PERSIST)
     private Address address;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_menu")
-    Menu menu;
+    @OneToOne(mappedBy = "restaurant",cascade = CascadeType.PERSIST)
+    private Menu menu;
+
+
 }

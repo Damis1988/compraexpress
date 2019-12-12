@@ -14,6 +14,10 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "customer",cascade = CascadeType.PERSIST)
-    private List<Product> products;
+    @ManyToMany(mappedBy = "menu",cascade = CascadeType.PERSIST)
+    private List<Product> product;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "id_restaurant")
+    Restaurant restaurant;
 }

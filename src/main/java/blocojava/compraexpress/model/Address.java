@@ -30,12 +30,12 @@ public class Address {
     @Column
     private String country;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "id_customer")
     private Customer customer;
 
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "id_restaurant")
     private Restaurant restaurant;
 }

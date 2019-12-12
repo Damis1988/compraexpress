@@ -3,11 +3,12 @@ package blocojava.compraexpress.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "order")
+@Table(name = "purchase")
 public class Order {
 
     /*
@@ -19,11 +20,12 @@ public class Order {
     private Long id;
 
     @Column
-    private Set<Item> itemSet;
-    @Column
+    private List<Item> itemSet;
+    @JoinColumn
     private Double total;
 
-    @ManyToOne
-    @JoinColumn(name = "id_order")
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name = "id_customer")
     private Customer customer;
-}
+
+ }

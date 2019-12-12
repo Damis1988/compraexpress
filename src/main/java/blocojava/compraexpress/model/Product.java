@@ -23,11 +23,11 @@ public class Product {
     @Column
     private Double price;
 
-    @ManyToMany
+    @ManyToMany (fetch=FetchType.LAZY)
     @JoinColumn(name = "id_menu")
-    private Menu menu;
+    private List<Menu> menu;
 
-    @ManyToMany
+    @ManyToMany (fetch=FetchType.LAZY)
     @JoinColumn(name = "id_item")
     private List<Item> item;
 

@@ -3,10 +3,11 @@ package blocojava.compraexpress.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "client")
+@Table(name = "customer")
 public class Customer {
 
     @Id
@@ -30,6 +31,6 @@ public class Customer {
     @OneToOne(mappedBy = "customer",cascade = CascadeType.PERSIST)
     private Address address;
 
-    @OneToMany(mappedBy = "customer", cascade =CascadeType.PERSIST)
-    private Order order;
+    @OneToMany(mappedBy = "customer",cascade =CascadeType.PERSIST)
+    private List<Order> Order;
 }
