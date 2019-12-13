@@ -23,11 +23,11 @@ public class Restaurant{
     @Column
     private String phone;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "id_address")
     private Address address;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "id_menu")
     private Menu menu;
 }

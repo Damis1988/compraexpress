@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -14,13 +15,13 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "menu", targetEntity = Sector.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
-    private List<Sector> sectors;
+    @OneToMany(mappedBy = "menu", targetEntity = Sector.class,fetch = FetchType.EAGER,cascade =CascadeType.PERSIST)
+    private Set<Sector> sectors;
 
-    @OneToMany(mappedBy = "menu", targetEntity = Product.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
-    private List<Product> products;
+    @OneToMany(mappedBy = "menu", targetEntity = Product.class,fetch = FetchType.EAGER, cascade =CascadeType.PERSIST)
+    private Set<Product> products;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "id_restaurant")
     private Restaurant restaurant;
 }

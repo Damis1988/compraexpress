@@ -3,6 +3,7 @@ package blocojava.compraexpress.controller;
 import blocojava.compraexpress.interceptor.CustomerSession;
 import blocojava.compraexpress.model.Address;
 import blocojava.compraexpress.model.Customer;
+import blocojava.compraexpress.repository.AddressRepository;
 import blocojava.compraexpress.repository.CustomerRepository;
 import blocojava.compraexpress.security.CryptWithMD5;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class CustomerController {
     CryptWithMD5 cryptWithMD5;
     @Autowired
     CustomerSession customerSession;
+    @Autowired
+    AddressRepository addressRepository;
 
     String msg = "";
 
@@ -102,6 +105,8 @@ public class CustomerController {
                 address.setState(state);
                 address.setCountry(country);
                 customer.setAddress(address);
+                addressRepository.save(address);
+
             } else {
                 model.put("message", "Oops, fill all the fields in order to register an address.\nRegistering an address is optional.");
                 return;
