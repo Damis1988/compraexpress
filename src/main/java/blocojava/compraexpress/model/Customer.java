@@ -31,6 +31,6 @@ public class Customer{
     @JoinColumn(name = "id_address")
     private Address address;
 
-    @OneToMany(mappedBy = "customer", targetEntity = Order.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
+    @OneToMany(mappedBy = "customer", targetEntity = Order.class, cascade =CascadeType.PERSIST)
     private List<Order> order;
 }

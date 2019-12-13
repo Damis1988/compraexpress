@@ -120,13 +120,11 @@ public class CustomerController {
         model.put("customer", customerSession.getLoggedUser());
         model.put("message", null);
         model.put("onGoing", null);
-        msg = "";
         return "secure/account/update";
     }
 
     @PostMapping(value = "secure/update")
-    public Customer update(@RequestParam("id") Long id,
-                       @RequestParam("name") String name,
+    public String update(@RequestParam("name") String name,
                        @RequestParam("surname") String surname,
                        @RequestParam("cpf") String cpf,
                        @RequestParam("email") String email,
@@ -142,7 +140,7 @@ public class CustomerController {
                        @RequestParam("country") String country,
                        Map<String,Object> model) {
 
-        Customer customer = customerRepository.findOne(id);
+        Customer customer = customerSession.getLoggedUser();
 
         if (StringUtils.hasText(name)){customer.setName(name);}
         if (StringUtils.hasText(surname)){customer.setSurname(surname);}
@@ -163,19 +161,22 @@ public class CustomerController {
             if (customerRepository.findByEmail(email) == null){
                 customer.setEmail(email);
             } else {
-                msg += "Could not update email. Email already in use. ";
-                model.put("message", msg);
+                model.put("customer", customer);
+                model.put("message", "Could not update email. Email already in use.");
+                return "secure/account/update";
             }
         }
         if (StringUtils.hasText(password) && StringUtils.hasText(confirm_password)){
             if (password.equals(confirm_password)){
                 customer.setPassword(password);
             } else {
-                msg += "Could not update password. Confirmation password did not match. ";
-                model.put("message", msg);
+                model.put("customer", customer);
+                model.put("message", "Could not update password. Confirmation password did not match.");
+                return "secure/account/update";
             }
         }
-        return customer;
+
+        return "secure/account/update";
     }
 
     @GetMapping(value = "secure/viewAccount")

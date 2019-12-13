@@ -22,7 +22,7 @@ public class Order {
     @Column
     private Double total;
 
-    @OneToMany(mappedBy = "order", targetEntity = Item.class, fetch = FetchType.LAZY, cascade =CascadeType.PERSIST)
+    @OneToMany(mappedBy = "order", targetEntity = Item.class, cascade =CascadeType.PERSIST)
     private List<Item> items;
 
     @ManyToOne

@@ -21,6 +21,6 @@ public class Sector {
     @JoinColumn(name = "id_menu")
     private Menu menu;
 
-    @OneToMany(mappedBy = "sector", targetEntity = Product.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "sector", targetEntity = Product.class, cascade = CascadeType.PERSIST)
     private List<Product> products;
 }
