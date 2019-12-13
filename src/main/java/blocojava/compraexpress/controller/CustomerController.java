@@ -115,7 +115,7 @@ public class CustomerController {
         return;
     }
 
-    @GetMapping(value = "update")
+    @GetMapping(value = "secure/update")
     public String viewUpdate(Map<String, Object> model){
         model.put("customer", customerSession.getLoggedUser());
         model.put("message", null);
@@ -124,7 +124,7 @@ public class CustomerController {
         return "secure/account/update";
     }
 
-    @PostMapping(value = "update")
+    @PostMapping(value = "secure/update")
     public Customer update(@RequestParam("id") Long id,
                        @RequestParam("name") String name,
                        @RequestParam("surname") String surname,
@@ -178,13 +178,13 @@ public class CustomerController {
         return customer;
     }
 
-    @GetMapping(value = "view")
+    @GetMapping(value = "secure/viewAccount")
     public String viewAccount(Map<String, Object> model){
         model.put("customer", customerSession.getLoggedUser());
         return "secure/account/view";
     }
 
-    @PostMapping(value = "delete")
+    @PostMapping(value = "secure/delete")
     public String delete(){
         customerRepository.delete(customerSession.getLoggedUser());
         customerSession.removeLoggedUser();

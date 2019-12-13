@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "restaurant")
+@RequestMapping(value = "secure/restaurant")
 public class RestaurantController {
 
     @Autowired

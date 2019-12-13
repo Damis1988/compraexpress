@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Restaurant Menu</title>
+    <title>SMARTFOOD — Restaurant Menu</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap-theme.min.css" integrity="sha384-jzngWsPS6op3fgRCDTESqrEJwRKck+CILhJVO5VvaAZCq8JYf8HsR/HPpBOOPZfR" crossorigin="anonymous">
@@ -12,19 +12,19 @@
     <headrer>
         <c:choose>
             <c:when test="${!guest}">
-                <li><a href="<%=request.getContextPath()%>/account/update">My Account</a></li>
-                <li><a href="<%=request.getContextPath()%>/restaurant/listRestaurant">Main Page</a></li>
-                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
-                <li><a href="<%=request.getContextPath()%>/login/logout">Log out</a></li>
+                <li><a href="<%=request.getContextPath()%>/account/secure/viewAccount">My Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/restaurant/listRestaurant">Main Page</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/order/view">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/login/secure/logout">Log out</a></li>
             </c:when>
             <c:otherwise>
-                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/order/view">Cart</a></li>
             </c:otherwise>
         </c:choose>
     </headrer>
 
 
-    <c:if test="${cart.size() == 0}">
+    <c:if test="${cart.size() != 0}">
         <table>
             <tr>
                 <th colspan="4">CART PREVIEW</th>
@@ -42,7 +42,7 @@
                 <td><c:out value="${item.quantity}"/></td>
                 <td><c:out value="${item.value}"/></td>
                 <td>
-                    <form id="cartpreview" method="post" action="<%=request.getContextPath()%>/order/addItem" class="form-horizontal">
+                    <form id="cartpreview" method="post" action="<%=request.getContextPath()%>/secure/order/updateItemQty" class="form-horizontal">
                         <div>
                             <input type="hidden" name="restaurant" value="${restaurant.id}">
                             <input type="hidden" name="product" value="${item.product.id}">
@@ -52,7 +52,7 @@
                 </td>
                 <td>
                     <div style="float:right">
-                        <button form="cartpreview" type="submit" class="btn btn-primary">Update quantity</button>
+                        <button class="btn btn-primary" form="cartpreview" type="submit" class="btn btn-primary">Update quantity</button>
                     </div>
                 </td>
             </tr>
@@ -60,7 +60,7 @@
 
         </table>
 
-        <button onclick="window.location.href ='<%=request.getContextPath()%>/order/view';">Fechar Compra</button>
+        <button class="btn btn-primary" onclick="window.location.href ='<%=request.getContextPath()%>/secure/order/view';">Vizualizar no carrinho</button>
     </c:if>
 
 
@@ -70,10 +70,10 @@
         <h3 style="text-transform:uppercase">${sector}</h3>
         <br><br>
         <c:forEach var="product" items="${restaurant.menu.products}">
-            <c:if test="${product.sector.equals(sector)}">
+            <c:if test="${product.sector.equals(sector) && !cart.contains(product)}">
                 <p style="text-transform:uppercase">${product.name} — ${product.price}</p>
                 <br><br>
-                <form method="post" action="<%=request.getContextPath()%>/order/addItem" class="form-horizontal">
+                <form method="post" action="<%=request.getContextPath()%>/secure/order/addItem" class="form-horizontal">
                     <div class="col-sm-10">
                         <input type="hidden" name="restaurant" value="${restaurant.id}">
                         <input type="hidden" name="product" value="${product.id}">

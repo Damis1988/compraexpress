@@ -53,7 +53,7 @@ public class LoginController {
         return "redirect:/restaurant/listRestaurant";
     }
 
-    @GetMapping(value = "logout")
+    @GetMapping(value = "secure/logout")
     public String logout() {
         customerSession.removeLoggedUser();
         return "redirect:/login/doLogin";

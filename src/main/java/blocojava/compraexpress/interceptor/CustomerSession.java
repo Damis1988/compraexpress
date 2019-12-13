@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,9 +17,9 @@ public class CustomerSession {
 
     private Boolean guest = false;
     private Customer customer;
-    private List<Item> cart;
+    private ArrayList<Item> cart;
 
-    public void addLoggedUser(Customer c) {this.customer = c;}
+    public void addLoggedUser(Customer c) {this.customer = c; cart = new ArrayList<>();}
 
     public Customer getLoggedUser() {return customer;}
 
@@ -37,5 +38,6 @@ public class CustomerSession {
         guest.setPhone(null);
         this.customer = guest;
         this.guest = true;
+        cart = new ArrayList<>();
     }
 }
