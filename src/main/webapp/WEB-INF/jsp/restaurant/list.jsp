@@ -9,6 +9,19 @@
 </head>
 <body>
 
+    <headrer>
+        <c:choose>
+            <c:when test="${!guest}">
+                <li><a href="<%=request.getContextPath()%>/account/update">My Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/login/logout">Log out</a></li>
+            </c:when>
+            <c:otherwise>
+                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+            </c:otherwise>
+        </c:choose>
+    </headrer>
+
     <c:choose>
         <c:when test="${all == null}">
             <p>There are no restaurants available.</p>
@@ -17,7 +30,11 @@
             <h1>Choose a Restaurant</h1>
             <br>
             <c:forEach var="restaurant" items="${all}">
-                <a href="<%=request.getContextPath()%>/restaurant/menu/${restaurant.id_restaurant}"><c:out value="${restaurant.tradeName}"/></a><br>
+                <form method="post" action="<%=request.getContextPath()%>/restaurant/menu">
+                    <input type="hidden" name="id" value="${restaurant.getId()}" required>
+                    <button type="submit" class="btn btn-primary"><c:out value="${restaurant.tradeName}"/></button>
+                </form>
+                <br><br>
             </c:forEach>
         </c:otherwise>
     </c:choose>

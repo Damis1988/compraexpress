@@ -8,6 +8,22 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap-theme.min.css" integrity="sha384-jzngWsPS6op3fgRCDTESqrEJwRKck+CILhJVO5VvaAZCq8JYf8HsR/HPpBOOPZfR" crossorigin="anonymous">
 </head>
 <body>
+
+    <headrer>
+        <c:choose>
+            <c:when test="${!guest}">
+                <li><a href="<%=request.getContextPath()%>/account/update">My Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/restaurant/listRestaurant">Main Page</a></li>
+                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/login/logout">Log out</a></li>
+            </c:when>
+            <c:otherwise>
+                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+            </c:otherwise>
+        </c:choose>
+    </headrer>
+
+
     <c:if test="${cart.size() == 0}">
         <table>
             <tr>
@@ -55,9 +71,7 @@
         <br><br>
         <c:forEach var="product" items="${restaurant.menu.products}">
             <c:if test="${product.sector.equals(sector)}">
-                <p style="text-transform:uppercase">${product.name} — ${product.price} </p>
-                <br>
-                <p>${product.description}</p>
+                <p style="text-transform:uppercase">${product.name} — ${product.price}</p>
                 <br><br>
                 <form method="post" action="<%=request.getContextPath()%>/order/addItem" class="form-horizontal">
                     <div class="col-sm-10">

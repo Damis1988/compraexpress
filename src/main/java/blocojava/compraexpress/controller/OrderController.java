@@ -36,7 +36,7 @@ public class OrderController {
 
     @GetMapping(value = "/view")
     public String viewOrder(Map<String, Object> model){
-        //receive order through model and generate invoice to be validated or edited by consumer
+        //TODO receive order through model and generate invoice to be validated or edited by consumer
         return null;
     }
 

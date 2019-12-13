@@ -10,6 +10,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 </head>
 <body>
+
+<headrer>
+    <c:choose>
+        <c:when test="${!guest}">
+            <li><a href="<%=request.getContextPath()%>/account/update">My Account</a></li>
+            <li><a href="<%=request.getContextPath()%>/restaurant/listRestaurant">Main Page</a></li>
+            <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+            <li><a href="<%=request.getContextPath()%>/login/logout">Log out</a></li>
+        </c:when>
+        <c:otherwise>
+            <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+        </c:otherwise>
+    </c:choose>
+</headrer>
+
 <div class="container" style="width: 30em">
     <h2>ACCOUNT INFORMATION</h2>
     <br><br><br>

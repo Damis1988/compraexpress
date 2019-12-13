@@ -40,7 +40,7 @@ public class LoginController {
         Customer customer = customerRepository.findByEmailAndPassword(email,password);
         if (customer != null) {
             customerSession.addLoggedUser(customer);
-            return "redirect:/secure";
+            return "redirect:/restaurant/listRestaurant";
         } else {
             model.put("message", "Login not valid");
             return null;
@@ -56,7 +56,7 @@ public class LoginController {
     @GetMapping(value = "logout")
     public String logout() {
         customerSession.removeLoggedUser();
-        return "login/doLogin";
+        return "redirect:/login/doLogin";
     }
 }
 

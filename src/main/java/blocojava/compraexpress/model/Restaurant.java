@@ -12,7 +12,7 @@ public class Restaurant{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_restaurant;
+    private Long id;
 
     @Column
     private String legalName;
@@ -23,7 +23,7 @@ public class Restaurant{
     @Column
     private String phone;
 
-    @OneToOne(mappedBy = "restaurant",cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_address")
     private Address address;
 
