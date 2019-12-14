@@ -70,6 +70,12 @@
             <artifactId>tomcat-embed-jasper</artifactId>
             <version>8.5.15</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.10.Final</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

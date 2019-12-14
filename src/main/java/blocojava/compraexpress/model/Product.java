@@ -28,6 +28,6 @@ public class Product {
     @JoinColumn(name = "id_sector")
     private Sector sector; //e.g.: drinks, pasta, meat, seafood, desert, etc
 
-    @OneToMany(mappedBy = "product", targetEntity = Item.class,fetch = FetchType.EAGER, cascade =CascadeType.PERSIST)
-    private Set<Item> items;
+    @OneToMany(mappedBy = "product", targetEntity = Item.class, cascade =CascadeType.PERSIST)
+    private List<Item> items;
 }
