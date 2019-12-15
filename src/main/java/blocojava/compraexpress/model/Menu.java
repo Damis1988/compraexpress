@@ -13,7 +13,7 @@ import java.util.Set;
 @Table(name = "menu")
 public class Menu {
 
-  
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
