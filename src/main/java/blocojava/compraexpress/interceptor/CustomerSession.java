@@ -6,14 +6,20 @@ import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.util.List;
 
 @Data
 @Component
+@Transactional
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CustomerSession {
 
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    //private Long id;
     private Boolean guest = false;
     private Customer customer;
     private List<Item> cart;
@@ -37,5 +43,12 @@ public class CustomerSession {
         guest.setPhone(null);
         this.customer = guest;
         this.guest = true;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerSession{" +
+                "customer=" + customer +
+                '}';
     }
 }

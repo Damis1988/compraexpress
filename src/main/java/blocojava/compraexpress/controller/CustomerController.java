@@ -185,7 +185,8 @@ public class CustomerController {
 
     @GetMapping(value = "view")
     public String viewAccount(Map<String, Object> model){
-        model.put("customer", customerSession.getLoggedUser());
+        Customer customer = customerRepository.findOne(customerSession.getLoggedUser().getId());
+        model.put("customer", customer);
         return "secure/account/view";
     }
 

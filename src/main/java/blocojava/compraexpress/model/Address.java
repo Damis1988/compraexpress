@@ -37,4 +37,11 @@ public class Address {
     @OneToOne
     @JoinColumn(name = "id_restaurant")
     private Restaurant restaurant;
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                '}';
+    }
 }

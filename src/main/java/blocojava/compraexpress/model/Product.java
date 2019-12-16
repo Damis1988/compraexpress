@@ -30,4 +30,11 @@ public class Product {
 
     @OneToMany(mappedBy = "product", targetEntity = Item.class, cascade =CascadeType.PERSIST)
     private List<Item> items;
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                '}';
+    }
 }

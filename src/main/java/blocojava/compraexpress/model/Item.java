@@ -45,4 +45,11 @@ public class Item {
         this.quantity = quantity;
         updateValue();
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                '}';
+    }
 }
