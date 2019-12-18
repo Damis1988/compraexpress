@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
+    Iterable<Product> findByMenu_Id(Long id);
 }

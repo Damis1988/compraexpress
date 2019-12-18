@@ -33,4 +33,11 @@ public class Customer{
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
     private List<Order> order;
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                '}';
+    }
 }

@@ -59,4 +59,11 @@ public class Sector {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    @Override
+    public String toString() {
+        return "Sector{" +
+                "id=" + id +
+                '}';
+    }
 }

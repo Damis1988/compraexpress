@@ -1,23 +1,18 @@
 package blocojava.compraexpress.controller;
 
 import blocojava.compraexpress.interceptor.CustomerSession;
-import blocojava.compraexpress.model.Item;
-import blocojava.compraexpress.model.Product;
-import blocojava.compraexpress.model.Restaurant;
-import blocojava.compraexpress.repository.ItemRepository;
-import blocojava.compraexpress.repository.OrderRepository;
-import blocojava.compraexpress.repository.ProductRepository;
-import blocojava.compraexpress.repository.RestaurantRepository;
+import blocojava.compraexpress.model.*;
+import blocojava.compraexpress.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Controller
 @RequestMapping("order")
@@ -33,44 +28,78 @@ public class OrderController {
     RestaurantRepository restaurantRepository;
     @Autowired
     CustomerSession customerSession;
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    MenuRepository menuRepository;
+    @Autowired
+    SectorRepository sectorRepository;
 
     @GetMapping(value = "/view")
     public String viewOrder(Map<String, Object> model){
-        //TODO receive order through model and generate invoice to be validated or edited by consumer
-        return null;
+
+        ArrayList<Item> cart = (ArrayList<Item>) customerSession.getCart();
+        model.put("cart", cart);
+        return "cart/view";
     }
 
     @PostMapping(value = "addItem")
-    public String addItem(@RequestParam("restaurant") Long id_restaurant,
-                          @RequestParam("product") Long id_product,
-                          @RequestParam("qty") Integer qty,
-                          Map<String, Object> model){
+    public String buy(@RequestParam("restaurant") Long id_restaurant,@RequestParam("product") Long id,@RequestParam("qty") Integer qty, HttpSession session,Map<String, Object> model ) {
+        Product productModel = productRepository.findOne(id);
 
-        ArrayList<Item> items = (ArrayList) customerSession.getCart();
-        Product product = productRepository.findOne(id_product);
-
-        for (Item i : items) {
-            if (i.getProduct().equals(product)) {
-                if (qty > 0) {
-                    i.setQuantity(qty);
-                    items.set(items.indexOf(i), i);
-                } else if (qty == 0) {
-                    items.remove(i);
-                }
-                customerSession.setCart(items);
-                model.put("cart", items);
-                Restaurant restaurant = restaurantRepository.findOne(id_restaurant);
-                model.put("restaurant", restaurant);
-                return "restaurant/menu";
+        List<Item> cart = (List<Item>) session.getAttribute("cart");
+        if (cart == null || cart.size() == 0) {
+            cart = new ArrayList<Item>();
+            Item item = new Item();
+            item.setProduct(productModel);
+            item.setQuantity(qty);
+            cart.add(item);
+            session.setAttribute("cart", cart);
+        } else {
+            int index = exists(id,cart);
+            if (index == -1) {
+                Item item = new Item();
+                item.setProduct(productModel);
+                item.setQuantity(qty);
+                cart.add(item);
+            } else {
+                int quantity = cart.get(index).getQuantity() + qty;
+                cart.get(index).setQuantity(quantity);
             }
+            session.setAttribute("cart", cart);
         }
 
-        Item item = new Item(qty, product);
-        items.add(item);
-        customerSession.setCart(items);
-        model.put("cart", items);
+        customerSession.setCart(cart);
+        model.put("cart", cart);
+
         Restaurant restaurant = restaurantRepository.findOne(id_restaurant);
         model.put("restaurant", restaurant);
+        Menu menu = menuRepository.findMenuByRestaurant_Id(id_restaurant);
+        Iterable<Sector> sectors = sectorRepository.findByMenu_Id(menu.getId());
+        model.put("sectors", sectors);
+        Iterable<Product> products = productRepository.findByMenu_Id(menu.getId());
+        model.put("products", products);
+
         return "restaurant/menu";
     }
+
+    private int exists(Long id, List<Item> items) {
+        for (Item item : items) {
+            if (item.getId() != null && item.getId().equals(id)){
+                return items.indexOf(item);
+            }
+        }
+        return -1;
+    }
+
+    @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
+    public String remove(@RequestParam("id") Long id, HttpSession session) {
+        Product productModel = new Product();
+        List<Item> cart = (List<Item>) session.getAttribute("cart");
+        int index = this.exists(id, cart);
+        cart.remove(index);
+        session.setAttribute("cart", cart);
+        return "resraurant/menu";
+    }
+
 }

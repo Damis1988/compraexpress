@@ -1,9 +1,10 @@
 package blocojava.compraexpress.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+@NoArgsConstructor
 @Entity
 @Data
 @Table(name = "item")
@@ -44,5 +45,12 @@ public class Item {
     public void setQuantity(Integer quantity){
         this.quantity = quantity;
         updateValue();
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "product=" + product +
+                '}';
     }
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SectorRepository extends CrudRepository<Sector, Long> {
+    Iterable<Sector> findByMenu_Id(Long id);
 }

@@ -30,4 +30,11 @@ public class Restaurant{
     @OneToOne
     @JoinColumn(name = "id_menu")
     private Menu menu;
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                '}';
+    }
 }

@@ -24,7 +24,7 @@
     </headrer>
 
 
-    <c:if test="${cart.size() == 0}">
+    <c:if test="${cart.size() != 0}">
         <table>
             <tr>
                 <th colspan="4">CART PREVIEW</th>
@@ -66,11 +66,11 @@
 
     <h2><b>MENU</b></h2>
     <br><br>
-    <c:forEach var="sector" items="${restaurant.menu.sectors}">
-        <h3 style="text-transform:uppercase">${sector}</h3>
+    <c:forEach var="sector" items="${sectors}">
+        <h3 style="text-transform:uppercase">${sector.name}</h3>
         <br><br>
-        <c:forEach var="product" items="${restaurant.menu.products}">
-            <c:if test="${product.sector.equals(sector)}">
+        <c:forEach var="product" items="${products}">
+            <c:if test="${product.sector.id.equals(sector.id)}">
                 <p style="text-transform:uppercase">${product.name} — ${product.price}</p>
                 <br><br>
                 <form method="post" action="<%=request.getContextPath()%>/order/addItem" class="form-horizontal">

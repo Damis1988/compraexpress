@@ -2,7 +2,10 @@ package blocojava.compraexpress.controller;
 
 import blocojava.compraexpress.interceptor.CustomerSession;
 import blocojava.compraexpress.model.*;
+import blocojava.compraexpress.repository.MenuRepository;
+import blocojava.compraexpress.repository.ProductRepository;
 import blocojava.compraexpress.repository.RestaurantRepository;
+import blocojava.compraexpress.repository.SectorRepository;
 import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,12 @@ public class RestaurantController {
     RestaurantRepository restaurantRepository;
     @Autowired
     CustomerSession customerSession;
+    @Autowired
+    SectorRepository sectorRepository;
+    @Autowired
+    MenuRepository menuRepository;
+    @Autowired
+    ProductRepository productRepository;
 
     @GetMapping(value = "listRestaurant")
     public String list(Map<String, Object> model){
@@ -88,6 +97,13 @@ public class RestaurantController {
         model.put("restaurant", restaurant);
         List<Item> items = customerSession.getCart();
         model.put("cart", items);
+
+        Menu menu = menuRepository.findMenuByRestaurant_Id(restaurant.getId());
+        Iterable<Sector> sectors = sectorRepository.findByMenu_Id(menu.getId());
+        model.put("sectors", sectors);
+        Iterable<Product> products = productRepository.findByMenu_Id(menu.getId());
+        model.put("products", products);
+
         return "restaurant/menu";
     }
 }
