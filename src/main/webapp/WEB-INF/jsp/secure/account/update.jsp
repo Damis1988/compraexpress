@@ -14,13 +14,13 @@
 <headrer>
     <c:choose>
         <c:when test="${!guest}">
-            <li><a href="<%=request.getContextPath()%>/account/update">My Account</a></li>
-            <li><a href="<%=request.getContextPath()%>/restaurant/listRestaurant">Main Page</a></li>
-            <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
-            <li><a href="<%=request.getContextPath()%>/login/logout">Log out</a></li>
+            <li><a href="<%=request.getContextPath()%>/secure/account/view">My Account</a></li>
+            <li><a href="<%=request.getContextPath()%>/secure/restaurant/listRestaurant">Main Page</a></li>
+            <li><a href="<%=request.getContextPath()%>/secure/order/viewOrder">Cart</a></li>
+            <li><a href="<%=request.getContextPath()%>/login/secure/logout">Log out</a></li>
         </c:when>
         <c:otherwise>
-            <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+            <li><a href="<%=request.getContextPath()%>/secure/order/viewOrder">Cart</a></li>
         </c:otherwise>
     </c:choose>
 </headrer>
@@ -37,7 +37,7 @@
 
     <br>
     <h2>Personal information:</h2>
-    <form method="post" action="<%=request.getContextPath()%>/account/update" class="form-horizontal">
+    <form method="post" action="<%=request.getContextPath()%>/account/secure/update" class="form-horizontal">
         <input type="hidden" name="id" value="${customer.id}">
         <div class="form-group form-group-lg">
             <label for="name" class="col-sm-2 control-label">Name:</label>

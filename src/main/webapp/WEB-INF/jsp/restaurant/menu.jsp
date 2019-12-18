@@ -12,20 +12,24 @@
     <headrer>
         <c:choose>
             <c:when test="${!guest}">
-                <li><a href="<%=request.getContextPath()%>/account/update">My Account</a></li>
-                <li><a href="<%=request.getContextPath()%>/restaurant/listRestaurant">Main Page</a></li>
-                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
-                <li><a href="<%=request.getContextPath()%>/login/logout">Log out</a></li>
+                <li><a href="<%=request.getContextPath()%>/account/secure/view">My Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/restaurant/listRestaurant">Main Page</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/order/viewOrder">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/login/secure/logout">Log out</a></li>
             </c:when>
             <c:otherwise>
-                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/order/viewOrder">Cart</a></li>
             </c:otherwise>
         </c:choose>
     </headrer>
 
+    <c:if test="${message != null}">
+        <c:out value="${message}"/>
+    </c:if>
 
-    <c:if test="${cart.size() != 0}">
-        <table>
+    <c:if test="${cart.size() != 0 && cart != null}">
+        <br><br>
+        <table style="text-align: center">
             <tr>
                 <th colspan="4">CART PREVIEW</th>
             </tr>
@@ -42,11 +46,11 @@
                 <td><c:out value="${item.quantity}"/></td>
                 <td><c:out value="${item.value}"/></td>
                 <td>
-                    <form id="cartpreview" method="post" action="<%=request.getContextPath()%>/order/addItem" class="form-horizontal">
+                    <form id="cartpreview" method="post" action="<%=request.getContextPath()%>/secure/order/addItem" class="form-horizontal">
                         <div>
                             <input type="hidden" name="restaurant" value="${restaurant.id}">
                             <input type="hidden" name="product" value="${item.product.id}">
-                            <input type="number" step="1" class="form-control" name="qty" value="${item.quantity}">
+                            <input type="number" step="1" min="0" class="form-control" name="qty" value="${item.quantity}">
                         </div>
                     </form>
                 </td>
@@ -60,30 +64,33 @@
 
         </table>
 
-        <button onclick="window.location.href ='<%=request.getContextPath()%>/order/view';">Fechar Compra</button>
+        <button class="btn btn-primary" onclick="window.location.href ='<%=request.getContextPath()%>/secure/order/viewOrder';">Fechar Compra</button>
     </c:if>
 
-
-    <h2><b>MENU</b></h2>
     <br><br>
+    <h2><b>MENU</b></h2>
     <c:forEach var="sector" items="${sectors}">
-        <h3 style="text-transform:uppercase">${sector.name}</h3>
         <br><br>
+        <h3 style="text-transform:uppercase">${sector.name}</h3>
         <c:forEach var="product" items="${products}">
             <c:if test="${product.sector.id.equals(sector.id)}">
-                <p style="text-transform:uppercase">${product.name} — ${product.price}</p>
                 <br><br>
-                <form method="post" action="<%=request.getContextPath()%>/order/addItem" class="form-horizontal">
-                    <div class="col-sm-10">
-                        <input type="hidden" name="restaurant" value="${restaurant.id}">
-                        <input type="hidden" name="product" value="${product.id}">
-                        <label for="qty">Qty: </label>
-                        <input type="number" step="1" class="form-control" id="qty" name="qty" value="0">
-                    </div>
-                    <div style="float:right">
-                        <button type="submit" class="btn btn-primary">Update quantity</button>
-                    </div>
-                </form>
+                <div>
+                    <p style="text-transform:uppercase" align="left">${product.name} — ${product.price}</p>
+                    <br><br>
+                    <form method="post" action="<%=request.getContextPath()%>/secure/order/addItem" class="form-horizontal">
+                        <div class="col-sm-10">
+                            <input type="hidden" name="restaurant" value="${restaurant.id}">
+                            <input type="hidden" name="product" value="${product.id}">
+                            <label for="qty">Qty: </label>
+                            <input type="number" step="1" min="0" class="form-control" id="qty" name="qty" value="0">
+                        </div>
+                        <div style="float:right">
+                            <button type="submit" class="btn btn-primary">Update quantity</button>
+                        </div>
+                    </form>
+                </div>
+                <br><br>
             </c:if>
         </c:forEach>
     </c:forEach>

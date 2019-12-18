@@ -3,6 +3,7 @@ package blocojava.compraexpress.controller;
 import blocojava.compraexpress.interceptor.CustomerSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -15,9 +16,14 @@ public class SecureController {
     @Autowired
     CustomerSession customerSession;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    // redirects secure requests to either the login page or the main page
+    @GetMapping(value = "")
     public String main(Map<String,Object> model) {
-        model.put("customer", customerSession.getLoggedUser());
-        return "login/doLogin";
+        if (customerSession.getLoggedUser() == null) {
+            model.put("message", null);
+            return "login/doLogin";
+        } else {
+            return "redirect:/secure/restaurant/listRestaurant";
+        }
     }
 }

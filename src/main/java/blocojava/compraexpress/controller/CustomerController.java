@@ -26,14 +26,14 @@ public class CustomerController {
     @Autowired
     AddressRepository addressRepository;
 
-    String msg = "";
-
+    // encrypts password
     public String passwordCript(String password) {
         String passwordCript;
         passwordCript = cryptWithMD5.cryptWithMD5(password);
         return passwordCript;
     }
 
+    // manages request for account creation page
     @GetMapping(value = "create")
     public String viewCreate(Map<String, Object> model){
         model.put("message", null);
@@ -42,6 +42,7 @@ public class CustomerController {
         return "account/create";
     }
 
+    // saves new account to repository
     @PostMapping(value = "create")
     public void save(@RequestParam("name") String name,
                      @RequestParam("surname") String surname,
@@ -69,7 +70,7 @@ public class CustomerController {
             model.put("message", "Fill all the required fields.");
             return;
         }
-
+        // checks if email is not already in use
         if (customerRepository.findByEmail(email) != null){
             model.put("message", "Email already registered");
             model.put("success", false);
@@ -77,7 +78,7 @@ public class CustomerController {
             return;
         }
         customer.setEmail(email);
-
+        // confirms if both password input fileds match
         if (!password.equals(confirm_password)){
             model.put("message", "Passwords do not match");
             model.put("success", false);
@@ -86,7 +87,7 @@ public class CustomerController {
         }
         password = passwordCript(password);
         customer.setPassword(password);
-
+        // saves address to repository; address is not mandatory
         if (StringUtils.hasText(street) || StringUtils.hasText(number)
                 || StringUtils.hasText(complement) || StringUtils.hasText(zip)
                 || StringUtils.hasText(neighborhood) || StringUtils.hasText(city)
@@ -120,16 +121,18 @@ public class CustomerController {
         return;
     }
 
-    @GetMapping(value = "update")
+    // manages request for account updating page
+    @GetMapping(value = "secure/update")
     public String viewUpdate(Map<String, Object> model){
-        model.put("customer", customerSession.getLoggedUser());
+        Customer customer = customerRepository.findOne(customerSession.getLoggedUser().getId());
+        model.put("customer", customer);
         model.put("message", null);
         model.put("onGoing", null);
-        msg = "";
         return "secure/account/update";
     }
 
-    @PostMapping(value = "update")
+    // updates account values in repository
+    @PostMapping(value = "secure/update")
     public Customer update(@RequestParam("id") Long id,
                        @RequestParam("name") String name,
                        @RequestParam("surname") String surname,
@@ -147,6 +150,7 @@ public class CustomerController {
                        @RequestParam("country") String country,
                        Map<String,Object> model) {
 
+        model.put("message", "");
         Customer customer = customerRepository.findOne(id);
 
         if (StringUtils.hasText(name)){customer.setName(name);}
@@ -168,30 +172,32 @@ public class CustomerController {
             if (customerRepository.findByEmail(email) == null){
                 customer.setEmail(email);
             } else {
-                msg += "Could not update email. Email already in use. ";
-                model.put("message", msg);
+                model.put("message", "Could not update email. Email already in use. ");
             }
         }
         if (StringUtils.hasText(password) && StringUtils.hasText(confirm_password)){
             if (password.equals(confirm_password)){
                 customer.setPassword(password);
             } else {
-                msg += "Could not update password. Confirmation password did not match. ";
-                model.put("message", msg);
+                model.put("message", model.get("message") + "Could not update password. Confirmation password did not match.");
             }
         }
         return customer;
     }
 
-    @GetMapping(value = "view")
+    // manages request for account display page
+    @GetMapping(value = "secure/view")
     public String viewAccount(Map<String, Object> model){
-        model.put("customer", customerSession.getLoggedUser());
+        Customer customer = customerRepository.findOne(customerSession.getLoggedUser().getId());
+        model.put("customer", customer);
         return "secure/account/view";
     }
 
-    @PostMapping(value = "delete")
+    // deletes account
+    @PostMapping(value = "secure/delete")
     public String delete(){
-        customerRepository.delete(customerSession.getLoggedUser());
+        Customer customer = customerRepository.findOne(customerSession.getLoggedUser().getId());
+        customerRepository.delete(customer);
         customerSession.removeLoggedUser();
         return "redirect:/login/doLogin";
     }

@@ -26,6 +26,7 @@ public class CustomerSession {
 
     public List<Item> getCart() {return cart;}
 
+    // prepares session to be used by guest
     public void guestLogIn() {
         Customer guest = new Customer();
         guest.setName("no_name");

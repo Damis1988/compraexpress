@@ -13,6 +13,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Autowired
     LoginInterceptor loginInterceptor;
 
+    // wxtends web configuration to include an interceptor
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(loginInterceptor);

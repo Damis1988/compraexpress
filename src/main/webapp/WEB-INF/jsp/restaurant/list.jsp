@@ -12,12 +12,12 @@
     <headrer>
         <c:choose>
             <c:when test="${!guest}">
-                <li><a href="<%=request.getContextPath()%>/account/update">My Account</a></li>
-                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
-                <li><a href="<%=request.getContextPath()%>/login/logout">Log out</a></li>
+                <li><a href="<%=request.getContextPath()%>/account/secure/view">My Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/order/viewOrder">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/login/secure/logout">Log out</a></li>
             </c:when>
             <c:otherwise>
-                <li><a href="<%=request.getContextPath()%>/order/view">Cart</a></li>
+                <li><a href="<%=request.getContextPath()%>/secure/order/viewOrder">Cart</a></li>
             </c:otherwise>
         </c:choose>
     </headrer>
@@ -30,7 +30,7 @@
             <h1>Choose a Restaurant</h1>
             <br>
             <c:forEach var="restaurant" items="${all}">
-                <form method="post" action="<%=request.getContextPath()%>/restaurant/menu">
+                <form method="post" action="<%=request.getContextPath()%>/secure/restaurant/menu">
                     <input type="hidden" name="id" value="${restaurant.getId()}" required>
                     <button type="submit" class="btn btn-primary"><c:out value="${restaurant.tradeName}"/></button>
                 </form>

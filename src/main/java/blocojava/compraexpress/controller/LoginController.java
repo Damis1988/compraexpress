@@ -21,18 +21,20 @@ public class LoginController {
     @Autowired
     CryptWithMD5 cryptWithMD5;
 
+    // encrypts password
     public String passwordCript(String password) {
-
         String passwordCript;
         passwordCript = cryptWithMD5.cryptWithMD5(password);
         return passwordCript;
     }
 
+    // manages request for login page
     @GetMapping (value = "doLogin")
     public String loginPage() {
         return "login/doLogin";
     }
 
+    // logs customer to session
     @PostMapping(value = "doLogin")
     public String login(@RequestParam("email") String email, @RequestParam("password") String password,
                         Map<String, Object> model) {
@@ -40,20 +42,22 @@ public class LoginController {
         Customer customer = customerRepository.findByEmailAndPassword(email,password);
         if (customer != null) {
             customerSession.addLoggedUser(customer);
-            return "redirect:/restaurant/listRestaurant";
+            return "redirect:/secure/restaurant/listRestaurant";
         } else {
             model.put("message", "Login not valid");
             return null;
         }
     }
 
+    // logs customer as guest to session
     @GetMapping(value = "guest")
     public String guestLogIn(){
         customerSession.guestLogIn();
-        return "redirect:/restaurant/listRestaurant";
+        return "redirect:/secure/restaurant/listRestaurant";
     }
 
-    @GetMapping(value = "logout")
+    // clears session
+    @GetMapping(value = "secure/logout")
     public String logout() {
         customerSession.removeLoggedUser();
         return "redirect:/login/doLogin";

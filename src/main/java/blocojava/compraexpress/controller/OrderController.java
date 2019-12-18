@@ -6,8 +6,6 @@ import blocojava.compraexpress.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.Map;
 import java.util.Random;
 
 @Controller
-@RequestMapping("order")
+@RequestMapping("secure/order")
 public class OrderController {
 
     @Autowired
@@ -35,39 +33,40 @@ public class OrderController {
     @Autowired
     SectorRepository sectorRepository;
 
-    @GetMapping(value = "/view")
+    // manages request for order preview page
+    @GetMapping(value = "viewOrder")
     public String viewOrder(Map<String, Object> model){
-
         ArrayList<Item> cart = (ArrayList<Item>) customerSession.getCart();
         model.put("cart", cart);
         return "cart/view";
     }
 
+    // adds, update or remove an item from the cart
     @PostMapping(value = "addItem")
-    public String buy(@RequestParam("restaurant") Long id_restaurant,@RequestParam("product") Long id,@RequestParam("qty") Integer qty, HttpSession session,Map<String, Object> model ) {
-        Product productModel = productRepository.findOne(id);
+    public String manageItems(@RequestParam("restaurant") Long id_restaurant, @RequestParam("product") Long id_product, @RequestParam("qty") Integer qty, HttpSession session,Map<String, Object> model ) {
+        Product productModel = productRepository.findOne(id_product);
 
-        List<Item> cart = (List<Item>) session.getAttribute("cart");
-        if (cart == null || cart.size() == 0) {
+        ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart");
+        if (cart == null) {
             cart = new ArrayList<Item>();
-            Item item = new Item();
-            item.setProduct(productModel);
-            item.setQuantity(qty);
-            cart.add(item);
-            session.setAttribute("cart", cart);
-        } else {
-            int index = exists(id,cart);
-            if (index == -1) {
+        }
+
+        int index = exists(id_product, cart);
+        if (index == -1) {
+            if (qty > 0) {
                 Item item = new Item();
                 item.setProduct(productModel);
                 item.setQuantity(qty);
                 cart.add(item);
-            } else {
-                int quantity = cart.get(index).getQuantity() + qty;
-                cart.get(index).setQuantity(quantity);
             }
-            session.setAttribute("cart", cart);
+        } else {
+            if (qty > 0) {
+                cart.get(index).setQuantity(qty);
+            } else {
+                cart.remove(index);
+            }
         }
+        session.setAttribute("cart", cart);
 
         customerSession.setCart(cart);
         model.put("cart", cart);
@@ -83,23 +82,41 @@ public class OrderController {
         return "restaurant/menu";
     }
 
+    // checks if item already in the cart
     private int exists(Long id, List<Item> items) {
         for (Item item : items) {
-            if (item.getId() != null && item.getId().equals(id)){
+            if (item.getProduct().getId().equals(id)){
                 return items.indexOf(item);
             }
         }
         return -1;
     }
 
-    @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
-    public String remove(@RequestParam("id") Long id, HttpSession session) {
-        Product productModel = new Product();
-        List<Item> cart = (List<Item>) session.getAttribute("cart");
-        int index = this.exists(id, cart);
-        cart.remove(index);
-        session.setAttribute("cart", cart);
-        return "resraurant/menu";
-    }
+    // finalize purchase
+    @GetMapping(value = "finalize")
+    public String finalize(Map<String, Object> model){
 
+        Order order = new Order();
+        orderRepository.save(order);
+        for (Item item : customerSession.getCart()) {
+            item.setOrder(order);
+            itemRepository.save(item);
+        }
+        Customer customer = customerSession.getLoggedUser();
+        if (!customerSession.getGuest()) {
+            customer = customerRepository.findOne(customerSession.getLoggedUser().getId());
+            order.setCustomer(customer);
+        }
+        orderRepository.save(order);
+        customerSession.setCart(new ArrayList<>());
+
+        Random random = new Random();
+        int orderNumber = random.nextInt(850) + 1;
+        model.put("number", orderNumber);
+
+        int minutes = random.nextInt(30) + 15;
+        model.put("minutes", minutes);
+
+        return "cart/finalized";
+    }
 }

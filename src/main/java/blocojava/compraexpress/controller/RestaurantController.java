@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "restaurant")
+@RequestMapping(value = "secure/restaurant")
 public class RestaurantController {
 
     @Autowired
@@ -30,6 +30,7 @@ public class RestaurantController {
     @Autowired
     ProductRepository productRepository;
 
+    // manages request for a list all available restaurant page
     @GetMapping(value = "listRestaurant")
     public String list(Map<String, Object> model){
         Iterable<Restaurant> all = restaurantRepository.findAll();
@@ -37,59 +38,62 @@ public class RestaurantController {
         model.put("all", all);
         model.put("guest", guest);
 
-        // mocking restaurant
+        // mocking restaurant for test
         /*{
             Restaurant restaurant = new Restaurant();
             restaurant.setLegalName("Birosca da Maria");
             restaurant.setTradeName("McDonald's");
+            restaurantRepository.save(restaurant);
 
             Menu menu = new Menu();
+            restaurant.setMenu(menu);
+            menu.setRestaurant(restaurant);
+            menuRepository.save(menu);
 
             Sector sector1 = new Sector();
             sector1.setName("Bebidas");
+            sector1.setMenu(menu);
+            sectorRepository.save(sector1);
 
             Product product1 = new Product();
             product1.setName("Coca-Cola");
             product1.setPrice(5.5);
             product1.setSector(sector1);
+            product1.setMenu(menu);
+            productRepository.save(product1);
 
             Product product2 = new Product();
             product2.setName("Chai Latte");
             product2.setPrice(7.9);
             product2.setSector(sector1);
+            product2.setMenu(menu);
+            productRepository.save(product2);
 
             Sector sector2 = new Sector();
             sector2.setName("Hambúrguer");
+            sector2.setMenu(menu);
+            sectorRepository.save(sector2);
 
             Product product3 = new Product();
             product3.setName("CBO");
             product3.setPrice(19.9);
             product3.setSector(sector2);
+            product3.setMenu(menu);
+            productRepository.save(product3);
 
             Product product4 = new Product();
             product4.setName("Big Mac");
             product4.setPrice(17.90);
             product4.setSector(sector2);
-
-            List<Sector> sectors = new ArrayList<>();
-            sectors.add(sector1);
-            sectors.add(sector2);
-            menu.setSectors(sectors);
-
-            List<Product> products = new ArrayList<>();
-            products.add(product1);
-            products.add(product2);
-            products.add(product3);
-            products.add(product4);
-            menu.setProducts(products);
-
-            restaurant.setMenu(menu);
+            product4.setMenu(menu);
+            productRepository.save(product4);
             restaurantRepository.save(restaurant);
         }*/
 
         return "restaurant/list";
     }
 
+    // displays the content of a single restaurant, ie. the menu
     @PostMapping(value = "menu")
     public String view(@RequestParam("id") Long id,
                        Map<String,Object> model){
@@ -103,6 +107,7 @@ public class RestaurantController {
         model.put("sectors", sectors);
         Iterable<Product> products = productRepository.findByMenu_Id(menu.getId());
         model.put("products", products);
+        model.put("message", null);
 
         return "restaurant/menu";
     }
