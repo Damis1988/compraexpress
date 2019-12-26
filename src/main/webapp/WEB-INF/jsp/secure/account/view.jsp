@@ -52,6 +52,8 @@
 <br><br>
 <a href="<%=request.getContextPath()%>/account/secure/update">Update</a>
 <br><br>
+<a href="<%=request.getContextPath()%>/account/secure/delete">Deletar</a>
+<br><br>
 <a href="<%=request.getContextPath()%>/secure">Main Page</a>
 </body>
 </html>

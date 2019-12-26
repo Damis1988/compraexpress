@@ -122,10 +122,10 @@
                     <div class="col-sm-10">
                         <c:choose>
                             <c:when test="${(onGoing != null) && (onGoing.address.zip != null)}">
-                                <input type="number" id="zip" class="form-control" name="zip" onkeypress="$(this).mask('00000-000')" value="${onGoing.address.zip}">
+                                <input type="number" id="zip" class="form-control" name="zip" onkeypress="$(this).mask('00000-000')"  value="${onGoing.address.zip}">
                             </c:when>
                             <c:otherwise>
-                                <input type="number" id="zip" class="form-control" name="zip" onkeypress="$(this).mask('00000-000')" placeholder="ZIP code">
+                                <input type="number" id="zip" class="form-control" name="zip" onkeypress="$(this).mask('00000-000')"  placeholder="ZIP code">
                             </c:otherwise>
                         </c:choose>
                     </div>

@@ -194,7 +194,7 @@ public class CustomerController {
     }
 
     // deletes account
-    @PostMapping(value = "secure/delete")
+    @GetMapping(value = "secure/delete")
     public String delete(){
         Customer customer = customerRepository.findOne(customerSession.getLoggedUser().getId());
         customerRepository.delete(customer);
